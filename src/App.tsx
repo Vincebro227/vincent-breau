@@ -5,7 +5,7 @@ import Thoughts from './Thoughts';
 
 const App: React.FC = () => {
   return (
-    <Router>
+    <Router basename='/vincent-breau/'>
       <div>
         <nav className="navbar">
           <ul>
