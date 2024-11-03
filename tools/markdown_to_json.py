@@ -1,5 +1,4 @@
 import json
-import markdown
 import argparse
 import os
 import json_post
@@ -19,13 +18,9 @@ def markdown_to_json(directory):
     # Read all markdown files in the directory
     for filename in os.listdir(directory):
         if filename.endswith(".md") and filename != "template.md":
-            ''''with open(os.path.join(directory, filename), 'r') as file:
-                text = file.read()
-                html = markdown.markdown(text)
-                post = json_post.JsonPost(filename)
-                post.parsehtml(text)
-                #print(html)'''
-            post = json_post.JsonPost(filename)
+            post = json_post.JsonPost(filename, directory)
+            post.parsemd()
+            print(post)
 
 def main():
 
