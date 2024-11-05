@@ -1,7 +1,7 @@
 import json
 import argparse
 import os
-import json_post
+import tools.post as post
 
 '''
 Plan:
@@ -18,7 +18,7 @@ def markdown_to_json(directory):
     # Read all markdown files in the directory
     for filename in os.listdir(directory):
         if filename.endswith(".md") and filename != "template.md":
-            post = json_post.JsonPost(filename, directory)
+            post = post.JsonPost(filename, directory)
             post.parsemd()
             print(post.author)
             print(post.date)
@@ -35,6 +35,7 @@ def main():
         description="Convert markdown files to json"
     )
     parser.add_argument("-d", "--directory", help="input markdown directory", required=True)
+    parser.add_argument("-db", "--database", help="json database file", required=False)
     args = parser.parse_args()
 
     # Convert markdown files to json
