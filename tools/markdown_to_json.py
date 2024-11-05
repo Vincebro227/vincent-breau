@@ -20,7 +20,12 @@ def markdown_to_json(directory):
         if filename.endswith(".md") and filename != "template.md":
             post = json_post.JsonPost(filename, directory)
             post.parsemd()
-            print(post)
+            print(post.author)
+            print(post.date)
+            print(post.title)
+            print(post.status)
+            print(post.last_edited)
+            print(post.content)
 
 def main():
 

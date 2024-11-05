@@ -30,26 +30,68 @@ class JsonPost:
         
         return info
 
+
     def parsemd(self):
-
         with open(os.path.join(self.directory, self.filename), 'r') as file:
-            # Read line by line
             lines = file.readlines()
+            
+            # Define regex patterns
+            author_pattern = re.compile(r'^##\s*Author:\s*(.*)')
+            title_pattern = re.compile(r'^##\s*Title:\s*(.*)')
+            date_pattern = re.compile(r'^##\s*Date-of-Creation:\s*(.*)')
+            id_pattern = re.compile(r'^##\s*ID:\s*(.*)')
+            status_pattern = re.compile(r'^##\s*Status:\s*(.*)')
+            last_edited_pattern = re.compile(r'^##\s*Last-Edited:\s*(.*)')
+            content_pattern = re.compile(r'^##\s*Content:\s*(.*)', re.DOTALL)
+            
+            content_lines = []
+            content_started = False
+            
             for line in lines:
-                # Actual parsing
+                # Author
+                author_match = author_pattern.match(line)
+                if author_match:
+                    self.author = author_match.group(1).strip()
+                    continue
+                
                 # Title
-
+                title_match = title_pattern.match(line)
+                if title_match:
+                    self.title = title_match.group(1).strip()
+                    continue
+                
                 # Date
-
+                date_match = date_pattern.match(line)
+                if date_match:
+                    self.date = date_match.group(1).strip()
+                    continue
+                
                 # ID
-
+                id_match = id_pattern.match(line)
+                if id_match:
+                    self.id = id_match.group(1).strip()
+                    continue
+                
                 # Status
-
+                status_match = status_pattern.match(line)
+                if status_match:
+                    self.status = status_match.group(1).strip()
+                    continue
+                
                 # Last-edited
-
+                last_edited_match = last_edited_pattern.match(line)
+                if last_edited_match:
+                    self.last_edited = last_edited_match.group(1).strip()
+                    continue
+                
                 # Content
-                            
-                pass
+                if content_started:
+                    content_lines.append(line)
+                # If pattern is found, content has started and will be found below
+                elif content_pattern.match(line):
+                    content_started = True
+            
+            self.content = ''.join(content_lines).strip()
 
     def tojson(self):
         pass
