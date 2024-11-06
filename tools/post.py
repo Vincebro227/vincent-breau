@@ -2,7 +2,7 @@ import json
 import os
 import re
 
-class JsonPost:
+class Post:
 
     def __init__(self, filename, directory):
         self.filename = filename
@@ -93,5 +93,49 @@ class JsonPost:
             
             self.content = ''.join(content_lines).strip()
 
-    def tojson(self):
+    def tojson(self, database):
+
+        # Check if the database file exists
+        if os.path.exists(database):
+            with open(database, 'r') as file:
+                # Check if the file is empty
+                if os.stat(database).st_size == 0:
+                    data = {}
+                else:
+                    data = json.load(file)
+        else:
+            data = {}
+
+        # Check if the post is already in the database
+        if self.id in data:
+            # Check if the last edited date is newer than the one in the database
+            if self.last_edited > data[self.id]['last_edited']:
+                data[self.id] = {
+                    'title': self.title,
+                    'author': self.author,
+                    'date': self.date,
+                    'id': self.id,
+                    'status': self.status,
+                    'last_edited': self.last_edited,
+                    'content': self.content
+                }
+        else:
+            data[self.id] = {
+                'title': self.title,
+                'author': self.author,
+                'date': self.date,
+                'id': self.id,
+                'status': self.status,
+                'last_edited': self.last_edited,
+                'content': self.content
+            }
+
+        # If database file does not exist, create it
+        if not os.path.exists(database):
+            with open(database, 'w') as file:
+                json.dump(data, file, indent=4)
+        else: # If it does exist, write to it
+            with open(database, 'w') as file:
+                json.dump(data, file, indent=4)
+
         pass

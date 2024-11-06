@@ -1,7 +1,7 @@
 import json
 import argparse
 import os
-import tools.post as post
+import post
 
 '''
 Plan:
@@ -13,19 +13,20 @@ Plan:
 4. Write the dictionary to the json database file
 '''
 
-def markdown_to_json(directory):
+def markdown_to_json(directory, database):
 
     # Read all markdown files in the directory
     for filename in os.listdir(directory):
         if filename.endswith(".md") and filename != "template.md":
-            post = post.JsonPost(filename, directory)
-            post.parsemd()
-            print(post.author)
-            print(post.date)
-            print(post.title)
-            print(post.status)
-            print(post.last_edited)
-            print(post.content)
+            tmp_post = post.Post(filename, directory)
+            tmp_post.parsemd()
+            tmp_post.tojson(database)
+            #print(post.author)
+            #print(post.date)
+            #print(post.title)
+            #print(post.status)
+            #print(post.last_edited)
+            #print(post.content)
 
 def main():
 
@@ -35,11 +36,11 @@ def main():
         description="Convert markdown files to json"
     )
     parser.add_argument("-d", "--directory", help="input markdown directory", required=True)
-    parser.add_argument("-db", "--database", help="json database file", required=False)
+    parser.add_argument("-db", "--database", help="json database file", required=True)
     args = parser.parse_args()
 
     # Convert markdown files to json
-    markdown_to_json(args.directory)
+    markdown_to_json(args.directory, args.database)
 
 
 if __name__ == '__main__':
